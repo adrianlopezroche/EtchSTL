@@ -196,14 +196,14 @@ def printhelp():
     print(" -o FILENAME        output filename (default is stl.out)")
     print(" -t THICKNESS       plate thickness")
     print(" -p SIZE            pixel size")
+    print(" -P PITCH           distance between pixels")
     print(" -d DEPTH           pixel depth")
-    print(" -s DISTANCE        distance between pixels")
-    print(" -S SCALE           image scale (percent)")
-    print(" -f SIZE            frame size (in pixels)")
+    print(" -s SCALE           image scale (percent)")
+    print(" -f SIZE            size of frame around image, in pixels")
     print(" -h                 show help")
 
 def main():
-    opts, args = getopt.gnu_getopt(sys.argv[1:], 'o:t:d:p:s:S:f:h')
+    opts, args = getopt.gnu_getopt(sys.argv[1:], 'o:t:d:p:P:s:f:h')
 
     outname = "stl.out"
 
@@ -214,13 +214,13 @@ def main():
             outname = opt[1]
         elif opt[0] == '-t':
             thickness = float(opt[1])
-        elif opt[0] == '-d':
-            depth = float(opt[1])
         elif opt[0] == '-p':
             pixel_size = float(opt[1])
-        elif opt[0] == '-s':
+        elif opt[0] == '-P':
             pixel_separation = float(opt[1])
-        elif opt[0] == '-S':
+        elif opt[0] == '-d':
+            depth = float(opt[1])
+        elif opt[0] == '-s':
             scale = float(opt[1]) / 100.0
         elif opt[0] == '-f':
             frame = int(opt[1])

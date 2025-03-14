@@ -12,9 +12,9 @@ etchstl.py [options] IMAGE
  -o FILENAME        output filename (default is stl.out)
  -t THICKNESS       plate thickness
  -p SIZE            pixel size
+ -P PITCH           distance between pixels
  -d DEPTH           pixel depth
- -s DISTANCE        distance between pixels
- -S SCALE           image scale (percent)
- -f SIZE            frame size (in pixels)
+ -s SCALE           image scale (percent)
+ -f SIZE            size of frame around image, in pixels
  -h                 show help
 ```

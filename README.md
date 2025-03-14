@@ -15,12 +15,12 @@ Best results can be obtained by choosing a pixel size and pitch (or distance bet
 ```
 etchstl.py [options] IMAGE
 
- -o FILENAME        output filename (default is stl.out)
  -t THICKNESS       plate thickness
  -p SIZE            pixel size
  -P PITCH           distance between pixels
  -d DEPTH           pixel depth
  -s SCALE           image scale (percent)
  -f SIZE            size of frame around image, in pixels
+ -o FILENAME        output filename
  -h                 show help
 ```

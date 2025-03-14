@@ -25,6 +25,7 @@
 import struct
 import getopt
 import sys
+import pathlib
 from PIL import Image
 from PIL import ImageOps
 
@@ -193,21 +194,21 @@ def createmesh(image):
 
 def printhelp():
     print (f"Usage: etchstl.py [options] IMAGE")
-    print(" -o FILENAME        output filename (default is stl.out)")
     print(" -t THICKNESS       plate thickness")
     print(" -p SIZE            pixel size")
     print(" -P PITCH           distance between pixels")
     print(" -d DEPTH           pixel depth")
     print(" -s SCALE           image scale (percent)")
     print(" -f SIZE            size of frame around image, in pixels")
+    print(" -o FILENAME        output filename")
     print(" -h                 show help")
 
 def main():
+    global thickness, depth, pixel_size, pixel_separation, scale, frame
+
     opts, args = getopt.gnu_getopt(sys.argv[1:], 'o:t:d:p:P:s:f:h')
 
-    outname = "stl.out"
-
-    global thickness, depth, pixel_size, pixel_separation, scale, frame
+    outname = None
 
     for opt in opts:
         if opt[0] == '-o':
@@ -241,6 +242,9 @@ def main():
         img = ImageOps.expand(img, border=frame, fill="white")
 
     vertices, triangles = createmesh(img)
+
+    if outname == None:
+        outname = ''.join([pathlib.Path(args[0]).stem, '.stl'])
 
     savestl(outname, vertices, triangles)
 

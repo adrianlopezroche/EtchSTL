@@ -245,6 +245,8 @@ def main():
     if outname == None:
         outname = ''.join([pathlib.Path(args[0]).stem, '.stl'])
 
+    img = loadimage(args[0], scale)
+
     file = None
     try:
         file = open(outname, 'wb' if overwrite else 'xb')
@@ -262,8 +264,6 @@ def main():
 
     if file != None:
         with file:
-            img = loadimage(args[0], scale)
-
             if frame > 0:
                 img = ImageOps.expand(img, border=frame, fill="white")
 

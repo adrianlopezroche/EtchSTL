@@ -57,26 +57,25 @@ def writetriplet(file, coordinates):
     z = struct.pack('<f', coordinates[2])
     file.write(z)
 
-def savestl(filename, vertices, triangles):
-    with open(filename, 'wb') as f:
-        header = [0] * 80
-        header[0] = 83
-        header[1] = 84
-        header[2] = 76
+def savestl(file, vertices, triangles, overwrite=False):
+    header = [0] * 80
+    header[0] = 83
+    header[1] = 84
+    header[2] = 76
 
-        f.write(bytes(header))
+    file.write(bytes(header))
 
-        l = struct.pack('<I', len(triangles))
-        f.write(l)
+    l = struct.pack('<I', len(triangles))
+    file.write(l)
 
-        for triangle in triangles:
-            writetriplet(f, (0.0, 0.0, 0.0))
+    for triangle in triangles:
+        writetriplet(file, (0.0, 0.0, 0.0))
 
-            for index in triangle:
-                writetriplet(f, vertices[index])
+        for index in triangle:
+            writetriplet(file, vertices[index])
 
-            a = struct.pack('<H', 0)
-            f.write(a)
+        a = struct.pack('<H', 0)
+        file.write(a)
 
 def appendline(vertices, y, z, image_width):
     vertices.append((0, thickness - z, y))
@@ -200,15 +199,18 @@ def printhelp():
     print(" -d DEPTH           pixel depth")
     print(" -s SCALE           image scale (percent)")
     print(" -f SIZE            size of frame around image, in pixels")
-    print(" -o FILENAME        output filename")
+    print(" -o FILENAME        use specified filename for output")
+    print(" -y                 force overwrite if output file already exists")
+    print(" -n                 do not overwrite output file if it already exists")
     print(" -h                 show help")
 
 def main():
     global thickness, depth, pixel_size, pixel_separation, scale, frame
 
-    opts, args = getopt.gnu_getopt(sys.argv[1:], 'o:t:d:p:P:s:f:h')
+    opts, args = getopt.gnu_getopt(sys.argv[1:], 'o:t:d:p:P:s:f:ynh')
 
     outname = None
+    overwrite = None
 
     for opt in opts:
         if opt[0] == '-o':
@@ -225,6 +227,10 @@ def main():
             scale = float(opt[1]) / 100.0
         elif opt[0] == '-f':
             frame = int(opt[1])
+        elif opt[0] == '-y':
+            overwrite = True
+        elif opt[0] == '-n':
+            overwrite = False
         elif opt[0] == '-h':
             printhelp()
             exit()
@@ -236,16 +242,33 @@ def main():
         print(f"{sys.argv[0]}: too many arguments.")
         exit()
 
-    img = loadimage(args[0], scale)
-
-    if frame > 0:
-        img = ImageOps.expand(img, border=frame, fill="white")
-
-    vertices, triangles = createmesh(img)
-
     if outname == None:
         outname = ''.join([pathlib.Path(args[0]).stem, '.stl'])
 
-    savestl(outname, vertices, triangles)
+    file = None
+    try:
+        file = open(outname, 'wb' if overwrite else 'xb')
+    except FileExistsError:
+        if overwrite == None:
+            answer = input(f"{sys.argv[0]}: overwrite '{outname}'? ")
+            if ('yes'.startswith(answer.lower())):
+                file = open(outname, 'wb')
+            else:
+                pass
+        elif overwrite:
+            savestl(outname, vertices, triangles, True)
+        elif not overwrite:
+            pass
+
+    if file != None:
+        with file:
+            img = loadimage(args[0], scale)
+
+            if frame > 0:
+                img = ImageOps.expand(img, border=frame, fill="white")
+
+            vertices, triangles = createmesh(img)
+
+            savestl(file, vertices, triangles)
 
 main()

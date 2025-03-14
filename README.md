@@ -21,6 +21,8 @@ etchstl.py [options] IMAGE
  -d DEPTH           pixel depth
  -s SCALE           image scale (percent)
  -f SIZE            size of frame around image, in pixels
- -o FILENAME        output filename
+ -o FILENAME        use specified filename for output
+ -y                 force overwrite if output file already exists
+ -n                 do not overwrite output file if it already exists
  -h                 show help
 ```

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 #
-#  EtchSTL - A program for converting images into 3D plates with simulated etching.
+#  EtchSTL - A program for converting images into 3D plates with an etched appearance.
 #
 #  Copyright (c) 2025 Adrian Lopez
 #

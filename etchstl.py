@@ -147,17 +147,21 @@ def createmesh(image):
                 triangles.append((insetline1 + x*2 + 1, insetline0 + x*2 + 2, insetline0 + x*2 + 1))
                 triangles.append((insetline1 + x*2 + 1, insetline1 + x*2 + 2, insetline0 + x*2 + 2))
 
-                triangles.append((insetline0 + x*2 + 1, line0 + x*2 + 2, line0 + x*2 + 1))
-                triangles.append((insetline0 + x*2 + 1, insetline0 + x*2 + 2, line0 + x*2 + 2))
+                if pixel_separation > 0 or y == 0 or image.getpixel((x, y - 1)) != p:
+                    triangles.append((insetline0 + x*2 + 1, line0 + x*2 + 2, line0 + x*2 + 1))
+                    triangles.append((insetline0 + x*2 + 1, insetline0 + x*2 + 2, line0 + x*2 + 2))
 
-                triangles.append((line1 + x*2 + 1, line1 + x*2 + 2, insetline1 + x*2 + 1))
-                triangles.append((line1 + x*2 + 2, insetline1 + x*2 + 2, insetline1 + x*2 + 1))
+                if pixel_separation > 0 or y + 1 == image_height or image.getpixel((x, y + 1)) != p:
+                    triangles.append((line1 + x*2 + 1, line1 + x*2 + 2, insetline1 + x*2 + 1))
+                    triangles.append((line1 + x*2 + 2, insetline1 + x*2 + 2, insetline1 + x*2 + 1))
 
-                triangles.append((insetline0 + x*2 + 2, line1 + x*2 + 2, line0 + x*2 + 2))
-                triangles.append((line1 + x*2 + 2, insetline0 + x*2 + 2, insetline1 + x * 2 + 2))
+                if pixel_separation > 0 or x == 0 or image.getpixel((x - 1, y)) != p:
+                    triangles.append((line0 + x*2 + 1, line1 + x*2 + 1, insetline0 + x*2 + 1))
+                    triangles.append((insetline1 + x * 2 + 1, insetline0 + x*2 + 1, line1 + x*2 + 1))
 
-                triangles.append((line0 + x*2 + 1, line1 + x*2 + 1, insetline0 + x*2 + 1))
-                triangles.append((insetline1 + x * 2 + 1, insetline0 + x*2 + 1, line1 + x*2 + 1))
+                if pixel_separation > 0 or x + 1 == image_width or image.getpixel((x + 1, y)) != p:
+                    triangles.append((insetline0 + x*2 + 2, line1 + x*2 + 2, line0 + x*2 + 2))
+                    triangles.append((line1 + x*2 + 2, insetline0 + x*2 + 2, insetline1 + x * 2 + 2))
 
     for y in range(0, image_height * 2 + 1):
         for x in range(0, image_width * 2 + 1):
